@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Piedra, Papel o Tijera</title>
+  <style>
+    body {
+      text-align: center;
+      font-family: Arial;
+      margin-top: 50px;
+    }
+    button {
+      font-size: 20px;
+      margin: 10px;
+      padding: 10px 20px;
+    }
+    #resultado {
+      margin-top: 30px;
+      font-size: 24px;
+    }
+  </style>
+</head>
+<body>
+  <h1>🪨📄✂️ Piedra, Papel o Tijera</h1>
+
+  <button onclick="jugar('piedra')">🪨 Piedra</button>
+  <button onclick="jugar('papel')">📄 Papel</button>
+  <button onclick="jugar('tijera')">✂️ Tijera</button>
+
+  <div id="resultado"></div>
+
+  <script>
+    function jugar(eleccionUsuario) {
+      const opciones = ['piedra', 'papel', 'tijera'];
+      const eleccionBot = opciones[Math.floor(Math.random() * 3)];
+
+      let resultado = "";
+
+      if (eleccionUsuario === eleccionBot) {
+        resultado = "¡Empate! 😐";
+      } else if (
+        (eleccionUsuario === "piedra" && eleccionBot === "tijera") ||
+        (eleccionUsuario === "papel" && eleccionBot === "piedra") ||
+        (eleccionUsuario === "tijera" && eleccionBot === "papel")
+      ) {
+        resultado = "¡Ganaste! 😎";
+      } else {
+        resultado = "Perdiste... 😢";
+      }
+
+      document.getElementById("resultado").innerHTML = `
+        Elegiste <strong>${eleccionUsuario}</strong><br>
+        Bot eligió <strong>${eleccionBot}</strong><br>
+        <h2>${resultado}</h2>
+      `;
+    }
+  </script>
+</body>
+</html>

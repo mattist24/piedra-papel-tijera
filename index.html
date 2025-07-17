@@ -2,58 +2,89 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Piedra, Papel o Tijera</title>
+  <title>Lista de Tareas</title>
   <style>
     body {
+      font-family: Arial, sans-serif;
       text-align: center;
-      font-family: Arial;
-      margin-top: 50px;
+      margin: 40px;
     }
+
+    input {
+      padding: 10px;
+      font-size: 16px;
+      width: 250px;
+    }
+
     button {
-      font-size: 20px;
-      margin: 10px;
-      padding: 10px 20px;
+      padding: 10px 15px;
+      font-size: 16px;
+      margin-left: 10px;
     }
-    #resultado {
-      margin-top: 30px;
-      font-size: 24px;
+
+    ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    li {
+      margin-top: 10px;
+      font-size: 18px;
+    }
+
+    .delete {
+      color: red;
+      margin-left: 10px;
+      cursor: pointer;
     }
   </style>
 </head>
 <body>
-  <h1>🪨📄✂️ Piedra, Papel o Tijera</h1>
 
-  <button onclick="jugar('piedra')">🪨 Piedra</button>
-  <button onclick="jugar('papel')">📄 Papel</button>
-  <button onclick="jugar('tijera')">✂️ Tijera</button>
+  <h1>📝 Mi Lista de Tareas</h1>
 
-  <div id="resultado"></div>
+  <input id="taskInput" placeholder="Escribe una tarea..." />
+  <button onclick="addTask()">Agregar</button>
+
+  <ul id="taskList"></ul>
 
   <script>
-    function jugar(eleccionUsuario) {
-      const opciones = ['piedra', 'papel', 'tijera'];
-      const eleccionBot = opciones[Math.floor(Math.random() * 3)];
+    // Cargar tareas guardadas del localStorage o iniciar vacío
+    let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
 
-      let resultado = "";
+    function renderTasks() {
+      const taskList = document.getElementById('taskList');
+      taskList.innerHTML = '';
 
-      if (eleccionUsuario === eleccionBot) {
-        resultado = "¡Empate! 😐";
-      } else if (
-        (eleccionUsuario === "piedra" && eleccionBot === "tijera") ||
-        (eleccionUsuario === "papel" && eleccionBot === "piedra") ||
-        (eleccionUsuario === "tijera" && eleccionBot === "papel")
-      ) {
-        resultado = "¡Ganaste! 😎";
-      } else {
-        resultado = "Perdiste... 😢";
-      }
+      tasks.forEach((task, index) => {
+        const li = document.createElement('li');
+        li.innerHTML = `${task} <span class="delete" onclick="deleteTask(${index})">❌</span>`;
+        taskList.appendChild(li);
+      });
 
-      document.getElementById("resultado").innerHTML = `
-        Elegiste <strong>${eleccionUsuario}</strong><br>
-        Bot eligió <strong>${eleccionBot}</strong><br>
-        <h2>${resultado}</h2>
-      `;
+      // Guardar en localStorage
+      localStorage.setItem('tasks', JSON.stringify(tasks));
     }
+
+    function addTask() {
+      const input = document.getElementById('taskInput');
+      const task = input.value.trim();
+
+      if (task) {
+        tasks.push(task);
+        input.value = '';
+        renderTasks();
+      }
+    }
+
+    function deleteTask(index) {
+      tasks.splice(index, 1);
+      renderTasks();
+    }
+
+    // Mostrar tareas al cargar la página
+    renderTasks();
   </script>
+
 </body>
 </html>

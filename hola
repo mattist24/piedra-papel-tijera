@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Lista de Tareas</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin: 40px;
+    }
+
+    input {
+      padding: 10px;
+      font-size: 16px;
+      width: 250px;
+    }
+
+    button {
+      padding: 10px 15px;
+      font-size: 16px;
+      margin-left: 10px;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    li {
+      margin-top: 10px;
+      font-size: 18px;
+    }
+
+    .delete {
+      color: red;
+      margin-left: 10px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>📝 Mi Lista de Tareas</h1>
+
+  <input id="taskInput" placeholder="Escribe una tarea..." />
+  <button onclick="addTask()">Agregar</button>
+
+  <ul id="taskList"></ul>
+
+  <script>
+    // Cargar tareas guardadas del localStorage o iniciar vacío
+    let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+
+    function renderTasks() {
+      const taskList = document.getElementById('taskList');
+      taskList.innerHTML = '';
+
+      tasks.forEach((task, index) => {
+        const li = document.createElement('li');
+        li.innerHTML = `${task} <span class="delete" onclick="deleteTask(${index})">❌</span>`;
+        taskList.appendChild(li);
+      });
+
+      // Guardar en localStorage
+      localStorage.setItem('tasks', JSON.stringify(tasks));
+    }
+
+    function addTask() {
+      const input = document.getElementById('taskInput');
+      const task = input.value.trim();
+
+      if (task) {
+        tasks.push(task);
+        input.value = '';
+        renderTasks();
+      }
+    }
+
+    function deleteTask(index) {
+      tasks.splice(index, 1);
+      renderTasks();
+    }
+
+    // Mostrar tareas al cargar la página
+    renderTasks();
+  </script>
+
+</body>
+</html>
